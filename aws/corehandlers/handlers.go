@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"regexp"
 	"runtime"
 	"strconv"
@@ -65,6 +66,11 @@ var SDKVersionUserAgentHandler = request.NamedHandler{
 	Name: "core.SDKVersionUserAgentHandler",
 	Fn: request.MakeAddToUserAgentHandler(aws.SDKName, aws.SDKVersion,
 		runtime.Version(), runtime.GOOS, runtime.GOARCH),
+}
+
+var EnvVarUserAgentSuffixHandler = request.NamedHandler{
+	Name: "core.EnvVarUserAgentSuffixHandler",
+	Fn: request.MakeAddToUserAgentFreeFormHandler(os.Getenv("HTTP_USER_AGENT_SUFFIX")),
 }
 
 var reStatusCode = regexp.MustCompile(`^(\d{3})`)
